@@ -150,7 +150,6 @@ async fn main() -> Result<ReturnVal, Box<dyn std::error::Error>> {
                 let re = Regex::new(r#"vault://[\w/]+"#).unwrap();
                 if let Some(vault_path) = re.captures(&line) {
                     let vault_path= vault_path.get(0).unwrap().as_str();
-                    println!("Found path: {}", vault_path);
                     let (_key,val) = find_secret(&"key", vault_path).await;
                     println!("{}", line.replace(vault_path,val.as_str()))
                 } else {
