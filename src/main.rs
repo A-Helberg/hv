@@ -147,13 +147,14 @@ async fn main() -> Result<ReturnVal, Box<dyn std::error::Error>> {
         "inject" => {
             for line in io::stdin().lock().lines() {
                 let line = line.unwrap();
-                let re = Regex::new(r#""vault://.+""#).unwrap();
+                let re = Regex::new(r#"vault://[\w/]+"#).unwrap();
                 if let Some(vault_path) = re.captures(&line) {
                     let vault_path= vault_path.get(0).unwrap().as_str();
+                    println!("Found path: {}", vault_path);
                     let (_key,val) = find_secret(&"key", vault_path).await;
-                    print!("{}", line.replace(vault_path,val.as_str()))
+                    println!("{}", line.replace(vault_path,val.as_str()))
                 } else {
-                    print!("{}",line);
+                    println!("{}",line);
 
                 }
             }
